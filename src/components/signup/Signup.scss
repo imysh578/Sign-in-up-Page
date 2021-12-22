@@ -1,0 +1,23 @@
+.signup-container {
+  margin: 200px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  .text-fields-box{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .buttons-box{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    padding-right: 50px;
+    button {
+      margin-left: 20px;
+    }
+  }
+}
