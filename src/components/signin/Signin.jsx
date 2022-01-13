@@ -1,38 +1,37 @@
-import "./Signup.scss";
+import "./Signin.scss";
 import { Box, Button, TextField } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import PopupMsg from "../alert/PopupMsg";
 
-export default function Signup() {
+export default function Signin() {
 	const [inputInfo, setInputInfo] = useState({
 		email: "",
 		password: "",
-		passwordRepeat: "",
 	});
 	const [signinResult, setSigninResult] = useState({
 		type : "info",
-		text : `Please fill out the forms and press the SUBMIT.`,
+		text : "If you don't have account, press SIGN-UP button!",
 	})
 
-	const submitOnClick = async () => {
-		const url = "http://localhost:5000/users/signup";
+	const signInOnClick = async () => {
+		const url = "http://localhost:5000/users/signin";
 		const response = await axios.post(url, inputInfo);
-		// console.log(response.data);
-		if (response.data.includes('success')){
+		if (response.data.includes('Success')) {
 			setSigninResult({
-				type: 'success',
-				text: `Account was created successfully!. Reload automatically in few seconds`
+				type: "success",
+				text: "Sign-in success!"
 			})
-			setTimeout(() => {
-				window.location.reload();
-			}, 2000);
-		} else if (response.data.includes('Existed')) {
+		} else if(response.data.includes('Fail')) {
 			setSigninResult({
-				type: 'warning',
-				text: 'This Email is already used.'
+				type: "warning",
+				text: 'Wrong Email or password. Please try again.',
 			})
 		}
+	};
+
+	const signUpOnClick = async () => {
+		window.location.href = "http://localhost:3000";
 	};
 
 	const textOnChange = (e) => {
@@ -40,6 +39,10 @@ export default function Signup() {
 			...inputInfo,
 			[e.target.name]: e.target.value,
 		});
+		setSigninResult({
+			type : "info",
+			text : "If you don't have account, press SIGN-UP button!",
+		})
 	};
 
 	// useEffect(() => {
@@ -49,7 +52,7 @@ export default function Signup() {
 	return (
 		<>
 			<Box
-				className="signup-container"
+				className="signin-container"
 				component="form"
 				sx={{
 					"& .MuiTextField-root": { m: 2, width: "40ch" },
@@ -57,7 +60,7 @@ export default function Signup() {
 				noValidate
 				autoComplete="off"
 			>
-				<h1>Sign-up Page</h1>
+				<h1>Sign-in Page</h1>
 				<div className="text-fields-box">
 					<TextField
 						required
@@ -76,31 +79,24 @@ export default function Signup() {
 						name="password"
 						onChange={textOnChange}
 					/>
-					<TextField
-						required
-						label="Repeat Password"
-						type="password"
-						autoComplete="current-password"
-						variant="standard"
-						name="passwordRepeat"
-						onChange={textOnChange}
-					/>
 				</div>
 
 				<PopupMsg type={signinResult.type} text={signinResult.text}/>
 
 				<div className="buttons-box">
 					<Button
-						disabled={
-							inputInfo.password === inputInfo.passwordRepeat && inputInfo.password !=="" ? false : true
-						}
 						variant="contained"
 						size="medium"
-						onClick={submitOnClick}
+						color="secondary"
+						onClick={signUpOnClick}
 					>
-						SUBMIT
+						Sign-up
+					</Button>
+					<Button variant="contained" size="medium" onClick={signInOnClick}>
+						Sign-in
 					</Button>
 				</div>
+				
 			</Box>
 		</>
 	);
